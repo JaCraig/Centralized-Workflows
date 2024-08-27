@@ -1,0 +1,43 @@
+name: Document Site Publish
+
+on: 
+  workflow_call:
+    inputs:
+      dotnet-version:
+        type: string
+        description: 'The version of the .NET SDK to use'
+        required: true
+        default: '8.0.x'
+
+jobs:
+  publish-docs:
+    env:
+      BUILD_CONFIG: 'Release'
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dotnet-version: ['${{inputs.dotnet-version}}']
+        
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      
+    - name: Setup .NET SDK ${{ matrix.dotnet-version }}
+      uses: actions/setup-dotnet@v4.0.1
+      with:
+        dotnet-version: ${{ matrix.dotnet-version }}
+        
+    - name: Restore dependencies
+      run: dotnet restore
+        
+    - name: Build
+      run: dotnet build --no-restore --configuration $BUILD_CONFIG
+
+    - run: dotnet tool update -g docfx
+    - run: docfx docfx_project/docfx.json
+
+    - name: Deploy
+      uses: peaceiris/actions-gh-pages@v4
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: docfx_project/_site
