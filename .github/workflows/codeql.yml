@@ -7,7 +7,7 @@ on:
         type: string
         description: 'The languages to be analyzed'
         required: false
-        default: "['javascript','csharp']"
+        default: "['javascript-typescript','csharp']"
 
 jobs:
   analyze:
