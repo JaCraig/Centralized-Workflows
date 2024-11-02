@@ -1,8 +1,13 @@
 name: "CodeQL"
 
-
 on: 
   workflow_call:
+    inputs:
+      languages:
+        type: string
+        description: 'The languages to be analyzed'
+        required: false
+        default: '"javascript","csharp"'
 
 jobs:
   analyze:
@@ -16,7 +21,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: [ 'csharp', 'javascript' ]
+        language: [${{ fromJSON(inputs.languages) }}]
         # CodeQL supports [ 'cpp', 'csharp', 'go', 'java', 'javascript', 'python', 'ruby' ]
         # Learn more about CodeQL language support at https://aka.ms/codeql-docs/language-support
 
