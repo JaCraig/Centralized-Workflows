@@ -7,7 +7,7 @@ on:
         type: string
         description: 'The languages to be analyzed'
         required: false
-        default: '"javascript","csharp"'
+        default: "['javascript','csharp']"
 
 jobs:
   analyze:
@@ -21,7 +21,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: [${{ fromJSON(inputs.languages) }}]
+        language: ${{ fromJSON(inputs.languages) }}
         # CodeQL supports [ 'cpp', 'csharp', 'go', 'java', 'javascript', 'python', 'ruby' ]
         # Learn more about CodeQL language support at https://aka.ms/codeql-docs/language-support
 
