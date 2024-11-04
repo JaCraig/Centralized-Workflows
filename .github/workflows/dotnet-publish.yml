@@ -25,10 +25,7 @@ on:
         NUGET_API_KEY:
             required: true
         PERSONAL_ACCESS_TOKEN:
-            required: true
-        GITHUB_TOKEN:
-            required: true
-      
+            required: true      
 
 jobs:
   build:
