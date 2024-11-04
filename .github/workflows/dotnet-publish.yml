@@ -17,10 +17,10 @@ on:
         description: 'The email to use for the commit'
         required: true
       coveralls-upload:
-        type: boolean
-        description: 'Upload coverage report to coveralls.io'
+        type: string
+        description: 'Upload specified coverage report to coveralls.io'
         required: false
-        default: false
+        default: ""
       test-filter:
         type: string
         description: 'The filter to use for the test'
@@ -83,8 +83,9 @@ jobs:
 
     - name: Publish coverage report to coveralls.io
       uses: coverallsapp/github-action@v2
-      if: ${{ inputs.coveralls-upload }}
+      if: ${{ inputs.coveralls-upload != '' }}
       with:
+        path-to-lcov: ${{ inputs.coveralls-upload }}
         github-token: ${{ secrets.GITHUB_TOKEN }}
         format: lcov
       
