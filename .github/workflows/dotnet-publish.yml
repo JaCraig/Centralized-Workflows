@@ -21,6 +21,11 @@ on:
         description: 'Upload coverage report to coveralls.io'
         required: false
         default: false
+      test-filter:
+        type: string
+        description: 'The filter to use for the test'
+        required: false
+        default: ''
     secrets:
         NUGET_API_KEY:
             required: true
@@ -67,7 +72,7 @@ jobs:
       run: dotnet build --no-restore --configuration $BUILD_CONFIG
       
     - name: Test
-      run: dotnet test /p:CollectCoverage=true /p:CoverletOutput=TestResults-${{ matrix.dotnet-version }}/ /p:CoverletOutputFormat=lcov /p:Configuration=$BUILD_CONFIG --no-build --verbosity normal --logger trx --results-directory "TestResults-${{ matrix.dotnet-version }}"
+      run: dotnet test /p:CollectCoverage=true /p:CoverletOutput=TestResults-${{ matrix.dotnet-version }}/ /p:CoverletOutputFormat=lcov /p:Configuration=$BUILD_CONFIG --no-build --verbosity normal --logger trx --results-directory "TestResults-${{ matrix.dotnet-version }}" ${{ inputs.test-filter }}
     
     - name: Upload test results
       uses: actions/upload-artifact@v4
