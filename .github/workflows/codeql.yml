@@ -8,6 +8,11 @@ on:
         description: 'The languages to be analyzed'
         required: false
         default: "['javascript-typescript','csharp']"
+      dotnet-version:
+        type: string
+        description: 'The version of .NET to use'
+        required: false
+        default: "9.0.x"
 
 jobs:
   analyze:
@@ -22,12 +27,18 @@ jobs:
       fail-fast: false
       matrix:
         language: ${{ fromJSON(inputs.languages) }}
+        dotnet-version: ['${{inputs.dotnet-version}}']
         # CodeQL supports [ 'cpp', 'csharp', 'go', 'java', 'javascript', 'python', 'ruby' ]
         # Learn more about CodeQL language support at https://aka.ms/codeql-docs/language-support
 
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
+
+    - name: Setup .NET SDK ${{ matrix.dotnet-version }}
+      uses: actions/setup-dotnet@v4.1.0
+      with:
+        dotnet-version: ${{ matrix.dotnet-version }}
 
     # Initializes the CodeQL tools for scanning.
     - name: Initialize CodeQL

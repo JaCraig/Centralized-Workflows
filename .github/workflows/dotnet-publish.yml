@@ -7,7 +7,7 @@ on:
         type: string
         description: 'The version of the .NET SDK to use'
         required: true
-        default: '8.0.x'
+        default: '9.0.x'
       user:
         type: string
         description: 'The user to use for the commit'
