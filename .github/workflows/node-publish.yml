@@ -51,12 +51,6 @@ jobs:
 
     - run: npm test
 
-    - name: Upload test results
-      uses: actions/upload-artifact@v4
-      with:
-        name: nodejs-results-${{ matrix.node-version }}
-        path: TestResults-${{ matrix.node-version }}
-
     - name: Update versioning with semantic-release
       run: npx semantic-release
       env:
