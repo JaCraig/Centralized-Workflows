@@ -8,6 +8,11 @@ on:
         description: 'The version of the .NET SDK to use'
         required: false
         default: '9.0.x'
+      test-filter:
+        type: string
+        description: 'The test filter to use'
+        required: false
+        default: ''
 
 jobs:
   build:
@@ -31,7 +36,7 @@ jobs:
     - name: Build
       run: dotnet build --no-restore --configuration $BUILD_CONFIG
     - name: Test
-      run: dotnet test /p:Configuration=$BUILD_CONFIG --no-build --verbosity normal --logger trx --results-directory "TestResults-${{ matrix.dotnet-version }}"
+      run: dotnet test /p:Configuration=$BUILD_CONFIG --no-build --verbosity normal --logger trx --results-directory "TestResults-${{ matrix.dotnet-version }}" ${{ inputs.test-filter }}
     - name: Upload test results
       uses: actions/upload-artifact@v4
       with:
