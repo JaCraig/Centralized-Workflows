@@ -1,11 +1,10 @@
 name: Dependabot Reviewer
 
-on: 
+on:
   workflow_call:
     secrets:
       token:
         required: true
-
 
 permissions:
   pull-requests: write

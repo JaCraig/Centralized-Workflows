@@ -1,45 +1,48 @@
 name: .NET Test Pull Requests
 
-on: 
+on:
   workflow_call:
     inputs:
       dotnet-version:
         type: string
-        description: 'The version of the .NET SDK to use'
+        description: "The version of the .NET SDK to use"
         required: false
-        default: '9.0.x'
+        default: "9.0.x"
       test-filter:
         type: string
-        description: 'The test filter to use'
+        description: "The test filter to use"
         required: false
-        default: ''
+        default: ""
 
 jobs:
   build:
-  
     env:
-      BUILD_CONFIG: 'Debug'
+      BUILD_CONFIG: "Debug"
 
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        dotnet-version: ['${{inputs.dotnet-version}}']
+        dotnet-version: ["${{inputs.dotnet-version}}"]
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Setup .NET SDK ${{ matrix.dotnet-version }}
-      uses: actions/setup-dotnet@v4.3.1
-      with:
-        dotnet-version: ${{ matrix.dotnet-version }}
-    - name: Restore dependencies
-      run: dotnet restore
-    - name: Build
-      run: dotnet build --no-restore --configuration $BUILD_CONFIG
-    - name: Test
-      run: dotnet test /p:Configuration=$BUILD_CONFIG --no-build --verbosity normal --logger trx --results-directory "TestResults-${{ matrix.dotnet-version }}" ${{ inputs.test-filter }}
-    - name: Upload test results
-      uses: actions/upload-artifact@v4
-      with:
-        name: dotnet-results-${{ matrix.dotnet-version }}
-        path: TestResults-${{ matrix.dotnet-version }}
-      if: ${{ always() }}
+      - uses: actions/checkout@v4
+      - name: Setup .NET SDK 8.0.x
+        uses: actions/setup-dotnet@v4.3.1
+        with:
+          dotnet-version: "8.0.x"
+      - name: Setup .NET SDK ${{ matrix.dotnet-version }}
+        uses: actions/setup-dotnet@v4.3.1
+        with:
+          dotnet-version: ${{ matrix.dotnet-version }}
+      - name: Restore dependencies
+        run: dotnet restore
+      - name: Build
+        run: dotnet build --no-restore --configuration $BUILD_CONFIG
+      - name: Test
+        run: dotnet test /p:Configuration=$BUILD_CONFIG --no-build --verbosity normal --logger trx --results-directory "TestResults-${{ matrix.dotnet-version }}" ${{ inputs.test-filter }}
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        with:
+          name: dotnet-results-${{ matrix.dotnet-version }}
+          path: TestResults-${{ matrix.dotnet-version }}
+        if: ${{ always() }}

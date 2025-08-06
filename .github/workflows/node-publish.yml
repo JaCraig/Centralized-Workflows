@@ -3,19 +3,19 @@
 
 name: NPM Publish
 
-on: 
-    workflow_call:
-      inputs:
-        node-version:
-          type: string
-          description: 'The version of Node.js to use'
-          required: true
-          default: '20.x'
-      secrets:
-        NPMTOKEN:
-          required: true
-        PERSONAL_ACCESS_TOKEN:
-          required: true
+on:
+  workflow_call:
+    inputs:
+      node-version:
+        type: string
+        description: "The version of Node.js to use"
+        required: true
+        default: "20.x"
+    secrets:
+      NPMTOKEN:
+        required: true
+      PERSONAL_ACCESS_TOKEN:
+        required: true
 
 env:
   GH_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
@@ -28,30 +28,29 @@ permissions:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        node-version: ['${{inputs.node-version}}']
+        node-version: ["${{inputs.node-version}}"]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
-      with:
-        registry-url: 'https://registry.npmjs.org/'
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-        token: ${{ secrets.NPMTOKEN }}
-        
-    - run: npm ci
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          registry-url: "https://registry.npmjs.org/"
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+          token: ${{ secrets.NPMTOKEN }}
 
-    - run: npm test
+      - run: npm ci
 
-    - name: Update versioning with semantic-release
-      run: npx semantic-release
-      env:
-        NODE_AUTH_TOKEN: ${{ secrets.NPMTOKEN }}
+      - run: npm test
+
+      - name: Update versioning with semantic-release
+        run: npx semantic-release
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPMTOKEN }}
