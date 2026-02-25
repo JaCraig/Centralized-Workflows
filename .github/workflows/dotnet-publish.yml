@@ -88,6 +88,7 @@ jobs:
           path-to-lcov: ${{ inputs.coveralls-upload }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
           format: lcov
+          fail-on-error: false
 
       - name: Upload NuGet package
         uses: actions/upload-artifact@v6
