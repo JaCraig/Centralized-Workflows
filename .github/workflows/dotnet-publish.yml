@@ -62,6 +62,14 @@ jobs:
         with:
           dotnet-version: ${{ matrix.dotnet-version }}
 
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
       - name: Install Versionize
         run: dotnet tool install --global Versionize
 
@@ -82,7 +90,7 @@ jobs:
         run: dotnet build ${{ inputs.solution }} --no-restore --configuration $BUILD_CONFIG
 
       - name: Test
-        run: dotnet test /p:CollectCoverage=true /p:CoverletOutput=TestResults-${{ matrix.dotnet-version }}/ /p:CoverletOutputFormat=lcov /p:Configuration=$BUILD_CONFIG --no-build --verbosity normal --logger trx --results-directory "TestResults-${{ matrix.dotnet-version }}" ${{ inputs.test-filter }}
+        run: dotnet test ${{ inputs.solution }} /p:CollectCoverage=true /p:CoverletOutput=TestResults-${{ matrix.dotnet-version }}/ /p:CoverletOutputFormat=lcov /p:Configuration=$BUILD_CONFIG --no-build --verbosity normal --logger trx --results-directory "TestResults-${{ matrix.dotnet-version }}" ${{ inputs.test-filter }}
 
       - name: Upload test results
         uses: actions/upload-artifact@v7
