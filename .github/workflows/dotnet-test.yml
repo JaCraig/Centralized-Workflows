@@ -8,6 +8,11 @@ on:
         description: "The version of the .NET SDK to use"
         required: false
         default: "10.0.x"
+      solution:
+        type: string
+        description: "The solution file to build. If not specified, the default discovery is used."
+        required: false
+        default: ""
       test-filter:
         type: string
         description: "The test filter to use"
@@ -36,9 +41,9 @@ jobs:
         with:
           dotnet-version: ${{ matrix.dotnet-version }}
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore ${{ inputs.solution }}
       - name: Build
-        run: dotnet build --no-restore --configuration $BUILD_CONFIG
+        run: dotnet build ${{ inputs.solution }} --no-restore --configuration $BUILD_CONFIG
       - name: Test
         run: dotnet test /p:Configuration=$BUILD_CONFIG --no-build --verbosity normal --logger trx --results-directory "TestResults-${{ matrix.dotnet-version }}" ${{ inputs.test-filter }}
       - name: Upload test results

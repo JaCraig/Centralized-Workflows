@@ -26,6 +26,11 @@ on:
         description: "The filter to use for the test"
         required: false
         default: ""
+      solution:
+        type: string
+        description: "The solution file to build. If not specified, the default discovery is used."
+        required: false
+        default: ""
     secrets:
       NUGET_API_KEY:
         required: true
@@ -71,10 +76,10 @@ jobs:
         continue-on-error: true
 
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore ${{ inputs.solution }}
 
       - name: Build
-        run: dotnet build --no-restore --configuration $BUILD_CONFIG
+        run: dotnet build ${{ inputs.solution }} --no-restore --configuration $BUILD_CONFIG
 
       - name: Test
         run: dotnet test /p:CollectCoverage=true /p:CoverletOutput=TestResults-${{ matrix.dotnet-version }}/ /p:CoverletOutputFormat=lcov /p:Configuration=$BUILD_CONFIG --no-build --verbosity normal --logger trx --results-directory "TestResults-${{ matrix.dotnet-version }}" ${{ inputs.test-filter }}
