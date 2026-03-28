@@ -9,8 +9,7 @@ on:
       node-version:
         type: string
         description: "The version of Node.js to use"
-        required: true
-        default: "26.x"
+        default: "24.x"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
