@@ -22,7 +22,6 @@ jobs:
   publish-docs:
     timeout-minutes: 30
     permissions:
-      actions: read
       contents: write
     env:
       BUILD_CONFIG: "Release"
@@ -41,10 +40,10 @@ jobs:
           dotnet-version: ${{ matrix.dotnet-version }}
 
       - name: Restore dependencies
-        run: dotnet restore ${{ inputs.solution }}
+        run: dotnet restore "${{ inputs.solution }}"
 
       - name: Build
-        run: dotnet build ${{ inputs.solution }} --no-restore --configuration $BUILD_CONFIG
+        run: dotnet build "${{ inputs.solution }}" --no-restore --configuration $BUILD_CONFIG
 
       - run: dotnet tool update -g docfx
       - run: docfx docfx_project/docfx.json
