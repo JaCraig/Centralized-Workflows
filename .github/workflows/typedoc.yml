@@ -10,6 +10,10 @@ on:
         type: string
         description: "The version of Node.js to use"
         default: "24.x"
+      entry-point:
+        type: string
+        description: "The entry point for TypeDoc"
+        required: true
     secrets:
       token:
         required: true
@@ -36,7 +40,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
       - run: npm ci
-      - run: npx typedoc src/Logger.ts --readme ./README.md --out ./docs --commentStyle all
+      - run: npx typedoc "${{ inputs.entry-point }}" --readme ./README.md --out ./docs --commentStyle all
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v4
