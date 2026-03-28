@@ -26,6 +26,9 @@ concurrency:
 jobs:
   build:
     timeout-minutes: 30
+    permissions:
+      actions: read
+      contents: read
     env:
       BUILD_CONFIG: "Debug"
 
