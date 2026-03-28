@@ -22,7 +22,6 @@ jobs:
   publish-docs:
     timeout-minutes: 30
     permissions:
-      actions: read
       contents: write
     env:
       BUILD_CONFIG: "Release"

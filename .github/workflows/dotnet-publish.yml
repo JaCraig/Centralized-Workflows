@@ -45,7 +45,6 @@ jobs:
   build:
     timeout-minutes: 45
     permissions:
-      actions: read
       contents: write
     env:
       BUILD_CONFIG: "Release"
