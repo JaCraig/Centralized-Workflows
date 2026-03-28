@@ -9,8 +9,13 @@ on:
         required: false
         default: "10.0.x"
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   publish-docs:
+    timeout-minutes: 30
     env:
       BUILD_CONFIG: "Release"
     runs-on: ubuntu-latest

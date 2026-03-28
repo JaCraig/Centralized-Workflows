@@ -12,8 +12,13 @@ on:
         required: true
         default: "26.x"
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
+    timeout-minutes: 30
     runs-on: ubuntu-latest
 
     strategy:

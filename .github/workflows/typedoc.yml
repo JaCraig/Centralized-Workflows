@@ -15,8 +15,13 @@ on:
       token:
         required: true
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   publish-docs:
+    timeout-minutes: 30
     runs-on: ubuntu-latest
 
     strategy:

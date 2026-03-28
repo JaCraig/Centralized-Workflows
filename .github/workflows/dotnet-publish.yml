@@ -32,8 +32,13 @@ on:
       PERSONAL_ACCESS_TOKEN:
         required: true
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
+    timeout-minutes: 45
     env:
       BUILD_CONFIG: "Release"
 
@@ -115,4 +120,4 @@ jobs:
 
       - name: Upload package to NuGet
         if: steps.versionize.outcome == 'success'
-        run: dotnet nuget push "**/*.nupkg" -k ${{ secrets.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json
+        run: dotnet nuget push "**/*.nupkg" -k ${{ secrets.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json --skip-duplicate

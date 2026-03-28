@@ -10,8 +10,13 @@ permissions:
   pull-requests: write
   contents: write
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   review-dependabot-pr:
+    timeout-minutes: 10
     runs-on: ubuntu-latest
     if: ${{ github.event.pull_request.user.login == 'dependabot[bot]' }}
     steps:

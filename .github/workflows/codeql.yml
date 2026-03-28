@@ -14,9 +14,14 @@ on:
         required: false
         default: "10.0.x"
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   analyze:
     name: Analyze
+    timeout-minutes: 45
     runs-on: ubuntu-latest
     permissions:
       actions: read
