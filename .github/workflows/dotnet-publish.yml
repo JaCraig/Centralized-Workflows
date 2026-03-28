@@ -87,13 +87,13 @@ jobs:
         continue-on-error: true
 
       - name: Restore dependencies
-        run: dotnet restore ${{ inputs.solution }}
+        run: dotnet restore "${{ inputs.solution }}"
 
       - name: Build
-        run: dotnet build ${{ inputs.solution }} --no-restore --configuration $BUILD_CONFIG
+        run: dotnet build "${{ inputs.solution }}" --no-restore --configuration $BUILD_CONFIG
 
       - name: Test
-        run: dotnet test ${{ inputs.solution }} /p:CollectCoverage=true /p:CoverletOutput=TestResults-${{ matrix.dotnet-version }}/ /p:CoverletOutputFormat=lcov /p:Configuration=$BUILD_CONFIG --no-build --verbosity normal --logger trx --results-directory "TestResults-${{ matrix.dotnet-version }}" ${{ inputs.test-filter }}
+        run: dotnet test "${{ inputs.solution }}" /p:CollectCoverage=true /p:CoverletOutput=TestResults-${{ matrix.dotnet-version }}/ /p:CoverletOutputFormat=lcov /p:Configuration=$BUILD_CONFIG --no-build --verbosity normal --logger trx --results-directory "TestResults-${{ matrix.dotnet-version }}" ${{ inputs.test-filter }}
 
       - name: Upload test results
         uses: actions/upload-artifact@v7
