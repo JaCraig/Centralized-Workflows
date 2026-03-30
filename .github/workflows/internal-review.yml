@@ -6,10 +6,6 @@ permissions:
   pull-requests: write
   contents: write
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: false
-
 jobs:
   review-dependabot-pr:
     if: ${{ github.event.pull_request.user.login == 'dependabot[bot]' }}
