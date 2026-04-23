@@ -10,7 +10,8 @@ on:
         default: "10.0.x"
       solution:
         type: string
-        description: "The solution file to build. If not specified, the default discovery is used."
+        description: "The solution file to build. If not specified, the default
+          discovery is used."
         required: false
         default: ""
 
@@ -22,13 +23,17 @@ jobs:
   publish-docs:
     timeout-minutes: 30
     permissions:
-      contents: write
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     env:
       BUILD_CONFIG: "Release"
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        dotnet-version: ["${{inputs.dotnet-version}}"]
+        dotnet-version: [ "${{inputs.dotnet-version}}" ]
 
     steps:
       - name: Checkout
@@ -43,13 +48,17 @@ jobs:
         run: dotnet restore "${{ inputs.solution }}"
 
       - name: Build
-        run: dotnet build "${{ inputs.solution }}" --no-restore --configuration $BUILD_CONFIG
+        run: dotnet build "${{ inputs.solution }}" --no-restore --configuration
+          $BUILD_CONFIG
 
       - run: dotnet tool update -g docfx
       - run: docfx docfx_project/docfx.json
 
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v4
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: docfx_project/_site
+          path: docfx_project/_site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
