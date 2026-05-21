@@ -11,19 +11,17 @@ on:
         description: "The version of Node.js to use"
         default: "24.x"
     secrets:
-      NPMTOKEN:
-        required: true
       PERSONAL_ACCESS_TOKEN:
         required: true
 
 env:
   GH_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-  NPM_TOKEN: ${{ secrets.NPMTOKEN }}
 
 permissions:
   contents: write # to be able to publish a GitHub release
   issues: write # to be able to comment on released issues
   pull-requests: write # to be able to comment on released pull requests
+  id-token: write # required for npm trusted publishing (OIDC)
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -48,7 +46,6 @@ jobs:
           registry-url: "https://registry.npmjs.org/"
           node-version: ${{ matrix.node-version }}
           cache: "npm"
-          token: ${{ secrets.NPMTOKEN }}
 
       - run: npm ci
 
@@ -56,5 +53,3 @@ jobs:
 
       - name: Update versioning with semantic-release
         run: npx semantic-release
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPMTOKEN }}
