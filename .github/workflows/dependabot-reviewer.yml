@@ -2,9 +2,6 @@ name: Dependabot Reviewer
 
 on:
   workflow_call:
-    secrets:
-      token:
-        required: true
 
 permissions:
   pull-requests: write
