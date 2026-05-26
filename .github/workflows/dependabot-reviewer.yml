@@ -29,6 +29,7 @@ jobs:
         env:
           PR_URL: ${{github.event.pull_request.html_url}}
           GITHUB_TOKEN: ${{secrets.token}}
+          GH_TOKEN: ${{ github.token }}
       - name: Approve major updates of development dependencies
         if: ${{steps.dependabot-metadata.outputs.update-type == 'version-update:semver-major' && steps.dependabot-metadata.outputs.dependency-type == 'direct:development'}}
         run: gh pr review $PR_URL --approve -b "**Approving** this pull request because **it includes a major update of a dependency used only in development**"
