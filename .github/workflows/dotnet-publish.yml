@@ -34,8 +34,6 @@ on:
     secrets:
       NUGET_API_KEY:
         required: true
-      PERSONAL_ACCESS_TOKEN:
-        required: true
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -130,7 +128,7 @@ jobs:
         if: steps.versionize.outcome == 'success'
         uses: ad-m/github-push-action@v1.3.0
         with:
-          github_token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          token: ${{ github.token }}
           branch: ${{ github.ref }}
           force: true
           tags: true
