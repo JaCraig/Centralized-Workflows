@@ -15,7 +15,7 @@ on:
         required: true
 
 env:
-  GH_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+  GH_TOKEN: ${{ github.token }}
 
 permissions:
   contents: write # to be able to publish a GitHub release
