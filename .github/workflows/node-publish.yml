@@ -10,9 +10,6 @@ on:
         type: string
         description: "The version of Node.js to use"
         default: "24.x"
-    secrets:
-      PERSONAL_ACCESS_TOKEN:
-        required: true
 
 env:
   GH_TOKEN: ${{ github.token }}
