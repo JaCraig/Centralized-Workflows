@@ -14,9 +14,6 @@ on:
         type: string
         description: "The entry point for TypeDoc"
         required: true
-    secrets:
-      token:
-        required: true
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -45,5 +42,5 @@ jobs:
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v4
         with:
-          github_token: ${{secrets.token}}
+          github_token: ${{ github.token }}
           publish_dir: docs
