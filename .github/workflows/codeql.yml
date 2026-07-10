@@ -7,7 +7,7 @@ on:
         type: string
         description: "The languages to be analyzed"
         required: false
-        default: "['javascript-typescript','csharp']"
+        default: "['javascript-typescript','csharp','actions']"
       dotnet-version:
         type: string
         description: "The version of .NET to use"
@@ -33,7 +33,7 @@ jobs:
       matrix:
         language: ${{ fromJSON(inputs.languages) }}
         dotnet-version: ["${{inputs.dotnet-version}}"]
-        # CodeQL supports [ 'cpp', 'csharp', 'go', 'java', 'javascript', 'python', 'ruby' ]
+        # CodeQL supports [ 'cpp', 'csharp', 'go', 'java', 'javascript', 'python', 'ruby', 'actions' ]
         # Learn more about CodeQL language support at https://aka.ms/codeql-docs/language-support
 
     steps:
