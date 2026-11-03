@@ -31,9 +31,8 @@ on:
         description: "The solution file to build. If not specified, the default discovery is used."
         required: false
         default: ""
+    secrets:
       nuget-user:
-        type: string
-        description: "The nuget.org profile username used for trusted publishing"
         required: true
 
 concurrency:
