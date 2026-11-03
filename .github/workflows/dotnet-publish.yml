@@ -31,8 +31,9 @@ on:
         description: "The solution file to build. If not specified, the default discovery is used."
         required: false
         default: ""
-    secrets:
-      NUGET_API_KEY:
+      nuget-user:
+        type: string
+        description: "The nuget.org profile username used for trusted publishing"
         required: true
 
 concurrency:
@@ -45,6 +46,7 @@ jobs:
     timeout-minutes: 45
     permissions:
       contents: write
+      id-token: write
     env:
       BUILD_CONFIG: "Release"
 
@@ -133,6 +135,15 @@ jobs:
           force: true
           tags: true
 
+      - name: NuGet login (OIDC)
+        if: steps.versionize.outcome == 'success'
+        id: nuget-login
+        uses: NuGet/login@v1
+        with:
+          user: ${{ inputs.nuget-user }}
+
       - name: Upload package to NuGet
         if: steps.versionize.outcome == 'success'
-        run: dotnet nuget push "**/*.nupkg" -k ${{ secrets.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json --skip-duplicate
+        env:
+          NUGET_API_KEY: ${{ steps.nuget-login.outputs.NUGET_API_KEY }}
+        run: dotnet nuget push "**/*.nupkg" --api-key "$NUGET_API_KEY" --source https://api.nuget.org/v3/index.json --skip-duplicate
