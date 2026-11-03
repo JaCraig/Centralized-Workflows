@@ -31,9 +31,10 @@ on:
         description: "The solution file to build. If not specified, the default discovery is used."
         required: false
         default: ""
-    secrets:
-      NUGET_API_KEY:
-        required: true
+    outputs:
+      package-created:
+        description: "Indicates if a package was created"
+        value: ${{ jobs.build.outputs.package-created }}
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -53,6 +54,8 @@ jobs:
     strategy:
       matrix:
         dotnet-version: ["${{inputs.dotnet-version}}"]
+    outputs:
+      package-created: ${{ steps.versionize.outcome == 'success' }}
 
     steps:
       - uses: actions/checkout@v7
@@ -133,7 +136,3 @@ jobs:
           branch: ${{ github.ref }}
           force: true
           tags: true
-
-      - name: Upload package to NuGet
-        if: steps.versionize.outcome == 'success'
-        run: dotnet nuget push "**/*.nupkg" --api-key "${{ secrets.NUGET_API_KEY }}" --source https://api.nuget.org/v3/index.json --skip-duplicate
