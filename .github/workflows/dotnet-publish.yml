@@ -32,7 +32,7 @@ on:
         required: false
         default: ""
     secrets:
-      nuget-user:
+      NUGET_API_KEY:
         required: true
 
 concurrency:
@@ -134,15 +134,6 @@ jobs:
           force: true
           tags: true
 
-      - name: NuGet login (OIDC)
-        if: steps.versionize.outcome == 'success'
-        id: nuget-login
-        uses: NuGet/login@v1
-        with:
-          user: ${{ secrets.nuget-user }}
-
       - name: Upload package to NuGet
         if: steps.versionize.outcome == 'success'
-        env:
-          NUGET_API_KEY: ${{ steps.nuget-login.outputs.NUGET_API_KEY }}
-        run: dotnet nuget push "**/*.nupkg" --api-key "$NUGET_API_KEY" --source https://api.nuget.org/v3/index.json --skip-duplicate
+        run: dotnet nuget push "**/*.nupkg" --api-key "${{ secrets.NUGET_API_KEY }}" --source https://api.nuget.org/v3/index.json --skip-duplicate
