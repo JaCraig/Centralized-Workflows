@@ -139,7 +139,7 @@ jobs:
         id: nuget-login
         uses: NuGet/login@v1
         with:
-          user: ${{ inputs.nuget-user }}
+          user: ${{ secrets.nuget-user }}
 
       - name: Upload package to NuGet
         if: steps.versionize.outcome == 'success'
