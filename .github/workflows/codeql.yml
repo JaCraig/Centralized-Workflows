@@ -12,7 +12,7 @@ on:
         type: string
         description: "The version of .NET to use"
         required: false
-        default: "10.0.x"
+        default: "11.0.x"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
